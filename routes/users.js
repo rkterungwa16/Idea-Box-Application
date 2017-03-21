@@ -1,9 +1,14 @@
-var express = require('express');
-var router = express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+// logout user and delete session
+exports.logout = function (req, res, next) {}
 
-module.exports = router;
+// login user already in database
+exports.login = function (req, res, next) {}
+
+// signup user not already in database
+exports.signup = function (req, res, next) {}
+
+//
+exports.profilePage = function (req, res, next) {}
+
+exports.ideasPost = function (req, res, next) {}
