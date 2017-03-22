@@ -148,11 +148,14 @@ app.post('/postIdea', function (req, res) {
 		var comment = req.body.comment;
 		var title = req.body.comment_title
 		var email = req.session.user.email;
+		var time = new Date().getTime();
 		var newCommentAuthor = { email: email,
 		 name: comment_author,
 		 title: comment_title,
 		 likes: [], 
-		 body: comment};
+		 time: time,
+		 body: comment
+		};
 
 		userIdeaRef.push(newCommentAuthor);
 		io.sockets.emit('newIdea', {newCommentAuthor: newCommentAuthor});
