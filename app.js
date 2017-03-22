@@ -62,7 +62,9 @@ app.get('/', function (req, res) {
 
 		userIdeaRef.orderByChild("time").on("child_added", function(data) {
    			console.log(data.val());
-   			res.render('homepage', {user: req.session.user, data: data.val()});
+   			var arr = [];
+   			arr.push(data.val());
+   			res.render('homepage', {user: req.session.user, data: arr});
 		});
 
 		//userIdeaRef.find({}).sort({time: -1}).execFind(function (err, idea){

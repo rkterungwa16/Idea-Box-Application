@@ -15,21 +15,21 @@ block content
             -if (data) 
                 div#postsOuter
                 div#socket
-                    -for (var i in data) {
-                    div.test
-                        h3#ideaTitle #{data.title}
-                        p#ideaBody #{data.body}
-                    button#like
-                        a Like
-                    button#dislike
-                        a DisLike
-                    span#comment 
-                        a Comment
-                    div#dateposted
-                        span#by By
-                        a 
-                            span#byname data.name
-                    span#commentdata data.time
+                    -for (var i=0; i<data.length; ++i) {
+                        div.test
+                            h3#ideaTitle #{data[i].title}
+                            p#ideaBody #{data[i].body}
+                        button#like
+                            a Like
+                        button#dislike
+                            a DisLike
+                        span#comment 
+                            a Comment
+                        div#dateposted
+                            span#by By
+                            a 
+                                span#byname #{data[i].name}
+                        span#commentdata #{data[i].time}
 
                     -}
             -else
