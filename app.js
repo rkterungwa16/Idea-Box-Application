@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var http = require('http');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -27,22 +28,7 @@ var firebase = require("firebase");
 var db = firebase.database();
 var ref = db.ref();
 var usersRef = ref.child('user');
-var userProductRef = ref.child('idea');
-
-/*ref.once("value")
-.then(function(snapshot) {
-  console.log(snapshot.val());
-  console.log(snapshot.key);
-});
-
-Promise.all ([
-	userRef.once('value'), 
-	userProductRef.once('value') 
-	]).then(function (snaps) {
-		var user = snaps[0].val();
-		var userProducts = snaps[1].val();
-	});
-*/
+var userIdeaRef = ref.child('idea');
 
 
 // view engine setup
@@ -58,19 +44,39 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret: "Your secret key"}));
 
-//app.use('/', index);
-//app.use('/users', users);
+// port that server will listen on
+var port = 3000;
+
+// start listening...
+//app.listen(port);
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
+server.listen(port);
+console.log('Express server listening on port '+port);
 
 var Users = [];
 
+
 app.get('/', function (req, res) {
-	res.render('welcome');
+
+	if (req.session.user) {
+
+		userIdeaRef.orderByChild("time").on("child_added", function(data) {
+   			console.log(data.val().name);
+   			res.render('homepage', {user: req.session.user, data: data});
+		});
+
+		//userIdeaRef.find({}).sort({time: -1}).execFind(function (err, idea){
+		//	res.render('homepage', {user: req.session.user, idea: idea});
+		//});
+
+	} else {
+
+		res.render('welcome');
+	}
+
 });
 
-/*app.get('/home', function (req, res) {
-	res.render('createstore');
-});
-*/
 app.get('/login', function (req, res) {
 	res.render('login');
 });
@@ -96,26 +102,17 @@ app.post('/login', function (req, res) {
 	});
 });
 
-/*app.get('/newstoreprofile', function (req, res) {
-	res.render('newstoreprofile');
-});*/
+
 
 app.get('/user/:name', function (req, res) {
 	if (req.session.user) {
 		name = req.params.name.toLowerCase();
 		query = {name: name};
 		currentUser = req.session.user;
-        res.render('newIdeaPost', {currentUser: currentUser});
-		//Users.filter(function (user) {
-		//	res.render('newstoreprofile', {user: user, currentStore: currentStore});
-		//});
+        res.render('newIdeaPost1', {currentUser: currentUser});
 	}
 })
 
-
-/*app.get('/product', function (req, res) {
-	res.render('addproduct');
-})*/
 
 
 app.post('/signup', function (req, res) {
@@ -144,40 +141,29 @@ app.post('/signup', function (req, res) {
 
 });
 
-/*
-app.post('/product', function (req, res) {
-	
-    res.redirect('/product'); 
-	// ''/store/'+storename'/addproduct/'+product
-});
 
-app.post('/addproduct', function (req, res) {
+app.post('/postIdea', function (req, res) {
 	if (req.session.user) {
-		var name = req.body.name;
-		var price = req.body.price;
-		var description = req.body.description;
+		var comment_author = req.session.user.name.toLowerCase();
+		var comment = req.body.comment;
+		var title = req.body.comment_title
 		var email = req.session.user.email;
-		var newProd = { email: email, name: name, price: price, description: description};
-		userProductRef.push(newProd);
-		res.render('addproduct');
-	};
+		var newCommentAuthor = { email: email,
+		 name: comment_author,
+		 title: comment_title,
+		 likes: [], 
+		 body: comment};
+
+		userIdeaRef.push(newCommentAuthor);
+		io.sockets.emit('newIdea', {newCommentAuthor: newCommentAuthor});
+		res.redirect('/users/'+name);
+	}
+
+	else {
+		res.redirect('/');
+	}
 })
 
-
-function checkSignIn(req, res, next) {
-	if(req.session.user) {
-		next(); // If session exists, proceed to page
-	}
-	else {
-		var err = new Error('Not logged in!');
-		console.log(req.session.user);
-		next(err);
-	}
-}
-
-app.get('/protected_page', function (req, res) {
-	res.render('protected_page', {id: req.session.user.id});
-});
 
 
 
@@ -188,12 +174,6 @@ app.get('/logout', function (req, res) {
 	res.redirect('/login');
 });
 
-app.use('/protected_page', function (err, req, res, next) {
-	console.log(err);
-	//User should be authenticated! Redirect him to log in
-	res.redirect('/login');
-});
-*/
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -211,5 +191,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-app.listen(3000);
+
 module.exports = app;
