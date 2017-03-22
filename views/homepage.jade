@@ -7,4 +7,30 @@ block content
                     
                     li.right
                         span#username #{user.name}
-                        a(href='login') Login
+                        a(href='logout') Logout
+
+        div#feed
+            button#submit
+                a Submit An Idea
+            -if (data) 
+                div#postsOuter
+                div#socket
+                    -for (var i in data) {
+                    div.test
+                        h3#ideaTitle #{data.title}
+                        p#ideaBody #{data.body}
+                    button#like
+                        a Like
+                    button#dislike
+                        a DisLike
+                    span#comment 
+                        a Comment
+                    div#dateposted
+                        span#by By
+                        a 
+                            span#byname data.name
+                    span#commentdata data.time
+
+                    -}
+            -else
+                div#noposts No posts at this time

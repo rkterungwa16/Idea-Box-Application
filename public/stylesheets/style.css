@@ -201,6 +201,10 @@ ul.topnav .dropdown:hover .dropdown-content {
   background: #333;
 }
 
+#username {
+  color: white;
+}
+
 /*
   Global Feed
 */
@@ -272,4 +276,10 @@ ul.topnav .dropdown:hover .dropdown-content {
     
     a {
       color: red;
+    }
+    #ideaTitle {
+      color: blue;
+    }
+    #ideaBody {
+      color: yellow;
     }

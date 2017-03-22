@@ -5,7 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var http = require('http');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -49,10 +48,10 @@ var port = 3000;
 
 // start listening...
 //app.listen(port);
-var server = http.createServer(app);
-var io = require('socket.io').listen(server);
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 server.listen(port);
-console.log('Express server listening on port '+port);
+console.log('Express server listening on port ' + port);
 
 var Users = [];
 
@@ -62,8 +61,8 @@ app.get('/', function (req, res) {
 	if (req.session.user) {
 
 		userIdeaRef.orderByChild("time").on("child_added", function(data) {
-   			console.log(data.val().name);
-   			res.render('homepage', {user: req.session.user, data: data});
+   			console.log(data.val());
+   			res.render('homepage', {user: req.session.user, data: data.val()});
 		});
 
 		//userIdeaRef.find({}).sort({time: -1}).execFind(function (err, idea){
@@ -151,15 +150,15 @@ app.post('/postIdea', function (req, res) {
 		var time = new Date().getTime();
 		var newCommentAuthor = { email: email,
 		 name: comment_author,
-		 title: comment_title,
-		 likes: [], 
+		 title: title,
+		 likes: [email], 
 		 time: time,
 		 body: comment
 		};
 
 		userIdeaRef.push(newCommentAuthor);
-		io.sockets.emit('newIdea', {newCommentAuthor: newCommentAuthor});
-		res.redirect('/users/'+name);
+		io.emit('newIdea', {newCommentAuthor: newCommentAuthor});
+		res.redirect('/');
 	}
 
 	else {
