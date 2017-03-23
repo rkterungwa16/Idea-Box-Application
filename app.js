@@ -42,15 +42,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret: "Your secret key"}));
 
-// port that server will listen on
-var port = 3000;
-
 // start listening...
 //app.listen(port);
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
-server.listen(port);
-console.log('Express server listening on port '+port);
+server.listen(3000);
+console.log('Express server listening on port '+3000);
 
 var Users = [];
 
