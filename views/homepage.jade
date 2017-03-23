@@ -11,9 +11,8 @@ block content
 
         div#feed
             button#submit
-                a Submit An Idea
-            -if (data) 
-                div#postsOuter
+                a(href='submitIdea') Submit An Idea
+            -if (data[0]) 
                 div#socket
                     -for (var i=0; i<data.length; ++i) {
                         div.test

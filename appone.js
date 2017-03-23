@@ -56,29 +56,33 @@ console.log('Express server listening on port '+port);
 var Users = [];
 
 userRef.on("value", function(snapshot) {
-   //console.log('This is snap', snapshot.val());
+   console.log('This is snap', snapshot.val());
 }, function (error) {
    console.log("Error: " + error.code);
 });
 
-userIdeaRef.orderByValue().equalTo("terungwakombol@gmail.com").on("value", function(data) {
-   console.log("Equal to filter: " + data.name);
-   data.forEach( function (data) {
-   	marr.push(data.val());
-   })
-   console.log('email key', marr)
+userRef.orderByChild("email").equalTo("terungwakombol@gmail.com").on("child_added", function(data) {
+   console.log("Equal to filter: " + data.val().name);
 });
 var arr = [];
 var marr = [];
 userIdeaRef.orderByValue().on("value", function(data) {
-   	//console.log('userIdeaRef', data.val());
+   	console.log('userIdeaRef', data.val());
    	data.forEach(function (data) {
    		console.log("The " + data.key + " rating is " + data.val())
    		arr.push(data.val());
    	});
-   	//console.log(arr[0]);
+   	console.log(arr[0]);
    	
 });
+
+userIdeaRef.orderByChild("time").on("child_added", function(data) {
+   			//console.log('This is get', data.val());
+   			
+   			//marr.push(data.val());
+   			
+		});
+
 console.log('this is array', arr);
 
 
@@ -87,8 +91,17 @@ app.get('/', function (req, res) {
 
 	if (req.session.user) {
 
-		var reverseArray = arr.reverse();
-   		res.render('homepage', {user: req.session.user, data: reverseArray});
+		userIdeaRef.orderByValue().on("value", function(data) {
+   			console.log('userIdeaRef', data.val());
+   			data.forEach(function (data) {
+   			console.log("The " + data.key + " rating is " + data.val())
+   			arr.push(data.val());
+   			var reverseArr = arr.reverse()
+
+   			res.render('homepage', {user: req.session.user, data: reverseArr});
+   	});
+   	
+});
 
 	} else {
 
@@ -197,9 +210,7 @@ app.post('/postIdea', function (req, res) {
 	}
 })
 
-app.get('/feed', function (req, res) {
-	render('homepage');
-})
+
 
 
 app.get('/logout', function (req, res) {
@@ -208,15 +219,6 @@ app.get('/logout', function (req, res) {
 	})
 	res.render('welcome');
 });
-
-app.get('/user/logout', function (req, res) {
-	
-	res.redirect('/logout');
-});
-
-app.get('/ideaData', function (req, res) {
-	res.json(docs);
-})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

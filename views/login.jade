@@ -7,10 +7,6 @@ block content
             form(action='/login', method='post')
                 if(message)
                     h4 #{message}
-                label(for='name') Name
-                br
-                input#name(type='text', name='name')
-                br
                 label(for='email') Email
                 br
                 input#email(type='email', name='email')

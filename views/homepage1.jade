@@ -1,0 +1,17 @@
+extends layout
+
+block content
+        div
+            div
+                ul.topnav
+                    
+                    li.right
+                        span#username #{user.name}
+                        a(href='logout') Logout
+
+        div#feed
+            button#submit
+                a(href='submitIdea') Submit An Idea
+                div#socket
+                            
+            

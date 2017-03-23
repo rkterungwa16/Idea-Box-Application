@@ -7,7 +7,13 @@ block content
                     
           li.right
             span#username #{currentUser.name}
-            a(href='logout') Logout
+            a(href='/logout') Logout  
+
+    aside.centerme
+      h1#theusername #{currentUser.name}
+      img#profPic(src='human.jpg')
+      a(href='feed') Feed
+
     #respond
       .backdrop
       form#commentform(action='/postIdea', method='post')
@@ -18,3 +24,5 @@ block content
           label.required(for='comment') Your Idea
           textarea#comment(name='comment', rows='10', tabindex='4', required='required')
           input(name='submit', type='submit', value='Submit Idea')
+
+    #myIdeas
