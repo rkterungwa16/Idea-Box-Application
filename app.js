@@ -46,7 +46,7 @@ app.use(session({secret: "Your secret key"}));
 //app.listen(port);
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
-server.listen(3000);
+server.listen(process.env.PORT || 3000);
 console.log('Express server listening on port '+3000);
 
 var Users = [];
