@@ -25,10 +25,10 @@ var firebase = require("firebase");
   };
   firebase.initializeApp(config);
 
+// Setup firebase variables
 var db = firebase.database();
 var userRef = db.ref('user/');
 var userIdeaRef = db.ref('idea/');
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -61,28 +61,22 @@ userRef.on("value", function(snapshot) {
    console.log("Error: " + error.code);
 });
 
-userIdeaRef.orderByValue().equalTo("terungwakombol@gmail.com").on("value", function(data) {
-   console.log("Equal to filter: " + data.name);
-   data.forEach( function (data) {
-   	marr.push(data.val());
-   })
-   console.log('email key', marr)
-});
 var arr = [];
-var marr = [];
+
+// Read all data in ideas collection
 userIdeaRef.orderByValue().on("value", function(data) {
-   	//console.log('userIdeaRef', data.val());
+   	
    	data.forEach(function (data) {
    		console.log("The " + data.key + " rating is " + data.val())
    		arr.push(data.val());
    	});
-   	//console.log(arr[0]);
+   	console.log(arr[0]);
    	
 });
 console.log('this is array', arr);
 
 
-
+// Router for welcome page and user home page
 app.get('/', function (req, res) {
 
 	if (req.session.user) {
@@ -96,6 +90,7 @@ app.get('/', function (req, res) {
 	}
 
 });
+
 
 app.get('/login', function (req, res) {
 	res.render('login');

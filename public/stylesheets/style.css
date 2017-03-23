@@ -282,3 +282,7 @@ ul.topnav .dropdown:hover .dropdown-content {
     #ideaBody {
       color: yellow;
     }
+
+#mdComment{
+  width: 50%;
+}

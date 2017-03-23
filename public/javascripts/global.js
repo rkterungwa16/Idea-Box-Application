@@ -1,13 +1,6 @@
 
 $(function () {
 
-
-    $("#comment").keydown(function(e){
-	    if (e.keyCode == 13) {
-	        $('#commentform').submit();
-	    	}
-	}); 
-
 	var hostname = window.location.hostname;
 	//var socket = io.connect(hostname);
 	var socket = io.connect(hostname);
