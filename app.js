@@ -55,37 +55,22 @@ console.log('Express server listening on port '+port);
 
 var Users = [];
 
-userRef.on("value", function(snapshot) {
-   //console.log('This is snap', snapshot.val());
-}, function (error) {
-   console.log("Error: " + error.code);
-});
-
 var arr = [];
 
 // Read all data in ideas collection
 userIdeaRef.orderByValue().on("value", function(data) {
-   	
    	data.forEach(function (data) {
-   		console.log("The " + data.key + " rating is " + data.val())
    		arr.push(data.val());
-   	});
-   	console.log(arr[0]);
-   	
+   	});  	
 });
-console.log('this is array', arr);
 
 
 // Router for welcome page and user home page
 app.get('/', function (req, res) {
-
 	if (req.session.user) {
-
 		var reverseArray = arr.reverse();
    		res.render('homepage', {user: req.session.user, data: reverseArray});
-
 	} else {
-
 		res.render('welcome');
 	}
 
