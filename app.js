@@ -174,7 +174,7 @@ app.post('/postIdea', function (req, res) {
 })
 
 app.get('/feed', function (req, res) {
-	render('homepage');
+   	res.redirect('/');
 })
 
 
