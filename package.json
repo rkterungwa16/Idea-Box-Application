@@ -3,8 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app"
+    "start": "node ./bin/www"
   },
+
+  "engines": {
+    "npm": "2.15.1",
+    "node":"4.4.4"
+  },
+
   "dependencies": {
     "body-parser": "~1.15.2",
     "cookie-parser": "~1.4.3",
