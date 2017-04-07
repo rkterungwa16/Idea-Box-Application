@@ -15,15 +15,15 @@ var app = express();
 // Database
 var firebase = require("firebase");
 
- // Initialize Firebase
-  var config = {
+// Initialize Firebase
+var config = {
     apiKey: "AIzaSyCkDsLxigAvac53lsGhbTXUZMNVaLsLwHs",
     authDomain: "idea-box-d9ed0.firebaseapp.com",
     databaseURL: "https://idea-box-d9ed0.firebaseio.com",
     storageBucket: "idea-box-d9ed0.appspot.com",
     messagingSenderId: "598011124219"
-  };
-  firebase.initializeApp(config);
+};
+firebase.initializeApp(config);
 
 // Setup firebase variables
 var db = firebase.database();
@@ -47,11 +47,21 @@ app.use(session({secret: "Your secret key"}));
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 server.listen(process.env.PORT || 3000);
-console.log('Express server listening on port '+3000);
+console.log('Express server listening on port '+ 3000);
 
 var Users = [];
 
 var arr = [];
+
+// userIdeaRef.orderByKey().on("child_added", function(snapshot) {
+//     var ideasArr = [];
+//    console.log(snapshot.val());
+// });
+
+// userIdeaRef.orderByChild("_id").equalTo(1491082395391).on("child_added", function(snapshot) {
+//   console.log(snapshot.key);
+//   console.log(snapshot.val());
+// });
 
 // Read all data in ideas collection
 userIdeaRef.orderByValue().on("value", function(data) {
@@ -96,7 +106,7 @@ app.post('/login', function (req, res) {
 	.then(function (user) {
 		var user = {email: email, password: password, name: name};
 		req.session.user = user;
-		console.log( req.body.email+ ' ' + req.body.password);
+		console.log( req.body.email + ' ' + req.body.password);
 	    res.redirect('/user/'+name);
 	})
 	.catch(function (error) {
@@ -129,10 +139,8 @@ app.post('/signup', function (req, res) {
 	firebase.auth().createUserWithEmailAndPassword(email, password)
 	.then (function (user) {
 		var newUser = {email: email, password: password, name: name};
-		Users.push(newUser);
 	    userRef.push(newUser);
 	    req.session.user = newUser;
-	    console.log(Users);
 	    res.redirect('/user/'+ name);
 	})
 	.catch(function (error) {
@@ -153,13 +161,15 @@ app.post('/postIdea', function (req, res) {
 		var comment = req.body.comment;
 		var title = req.body.comment_title
 		var email = req.session.user.email;
-		var time = new Date().toISOString()
+		var time = new Date().toISOString();
+		var id = new Date().valueOf();
 		var newCommentAuthor = { email: email,
 		 name: comment_author,
 		 title: title,
 		 likes: [email], 
 		 time: time,
-		 body: comment
+		 body: comment,
+		 _id: id
 		};
 
 		userIdeaRef.push(newCommentAuthor);
@@ -185,13 +195,44 @@ app.get('/logout', function (req, res) {
 	res.render('welcome');
 });
 
-app.get('/user/logout', function (req, res) {
-	
+app.get('/user/logout', function (req, res) {	
 	res.redirect('/logout');
 });
 
 app.get('/ideaData', function (req, res) {
-	res.json(docs);
+	if (req.session.user) {
+		currentUser = req.session.user;
+		console.log(arr);
+		res.json(arr);
+	}
+});
+
+app.get('/likes', function (req, res) {
+	if (req.session.user) {
+		var id = parseInt(req.query.id);
+		var email = req.session.user.email;
+		var uid;
+		var data;
+		var likesArr;
+		console.log('The id for like', id);
+		console.log(typeof id);
+		// locate idea with id.
+		userIdeaRef.orderByChild("_id").equalTo(id).on("child_added", function (snapshot) {
+  			console.log(snapshot.key);
+  			uid = snapshot.key;
+  			data = snapshot.val();
+  			likesArr = snapshot.val().likes; 			
+		});
+        
+        console.log(uid);
+        var updates = {};
+        likesArr.push(email);
+        updates['/idea/' + uid + '/' + '/likes/'] = likesArr;
+
+  		firebase.database().ref().update(updates);     
+        //console.log(data);
+  		res.json(data);
+	}
 })
 
 // catch 404 and forward to error handler

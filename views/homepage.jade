@@ -19,9 +19,11 @@ block content
                             h3#ideaTitle #{data[i].title}
                             p#ideaBody #{data[i].body}
                         button#like
-                            a Like
+                            a.linkshowlikes(href='#', rel='#{data[i]._id}') Like
+                        span.likesCount(id='#{data[i]._id}')
                         button#dislike
-                            a DisLike
+                            a.linkshowdislikes(href='#', rel='#{data[i]._id') DisLike
+                        span#showdislike
                         span#comment 
                             a Comment
                         div#dateposted

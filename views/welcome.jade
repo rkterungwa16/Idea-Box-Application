@@ -2,29 +2,45 @@ extends layout
 
 block content
         div
-            div
-                ul.topnav
-                    
+            #nav-bar
+                ul.topnav                   
                     li.right
                         a(href='login') Login
         // #primary-menu .menu-container
         .container
-            
-            form(action='/signup' method='post')
-                h2 Sign Up  To Post Your Ideas.
-                if(message)
-                    h4 #{message}
-                label(for='username') Name
+            #sign-up          
+                form(action='/signup' method='post')
+                    h2 Sign Up  To Post Your Ideas.
+                    if(message)
+                        h4 #{message}
+                    label(for='username') Name
+                    br
+                    input#storename(type='text', name='name')
+                    br
+                    label(for='email') Email
+                    br
+                    input#email(type='email', name='email')
+                    br
+                    label(for='password') Password
+                    br
+                    input#password(type='password', name='password')
+                    br
+                    button#btnsignup(type='submit') Sign Up
+            #sign-in
+                h2 Are you a returning member?
+                form(action='/login' method='post')
+                    label(for='email') Email
+                    br
+                    input#email(type='email', name='email')
+                    br
+                    label(for='password') Password
+                    br
+                    input#password(type='password', name='password')
+                    br
+                    button#btnlogin(type='submit') Login
                 br
-                input#storename(type='text', name='name')
+                button#signin-facebook-btn(type='submit') sign-in with facebook
                 br
-                label(for='email') Email
-                br
-                input#email(type='email', name='email')
-                br
-                label(for='password') Password
-                br
-                input#password(type='password', name='password')
-                br
-                button#btnsignup(type='submit') Sign Up
+                button#signin-google-btn(type='submit') sign-in with google 
+
                     

@@ -3,17 +3,18 @@ extends layout
 block content
 
         .container
-            h2 Login Details
-            form(action='/login', method='post')
-                if(message)
-                    h4 #{message}
-                label(for='email') Email
-                br
-                input#email(type='email', name='email')
-                br
-                label(for='password') Password
-                br
-                input#password(type='password', name='password')
-                br
-                button#btnlogin(type='submit') Login
+            #sign-in
+                h2 Login Details
+                form(action='/login', method='post')
+                    if(message)
+                        h4 #{message}
+                    label(for='email') Email
+                    br
+                    input#email(type='email', name='email')
+                    br
+                    label(for='password') Password
+                    br
+                    input#password(type='password', name='password')
+                    br
+                    button#btnlogin(type='submit') Login
                    
