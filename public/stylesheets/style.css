@@ -84,13 +84,14 @@ ul.topnav li {
   height: 5px;
 }
 
-#sign-up, #sign-in {
+#sign-up, #sign-in, #other-signin {
     text-align: center;
     padding-bottom: 10px;
 }
 
-#sign-up {
+#sign-up, #sign-in {
   border-bottom: 2px solid #333;
+  margin-bottom: 10px;
 }
 
 #btnlogin:hover {
