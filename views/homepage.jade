@@ -1,17 +1,11 @@
 extends layout
 
 block content
-        div
-            div
-                ul.topnav
-                    
-                    li.right
-                        span#username #{user.name}
-                        a(href='logout') Logout
-
-        div#feed
+        
+        div.submit
             button#submit
-                a(href='submitIdea') Submit An Idea
+                a.feed-link(href='submitIdea') Submit An Idea
+        div#feed
             -if (data[0]) 
                 div#socket
                     -for (var i=0; i<data.length; ++i) {
@@ -24,13 +18,16 @@ block content
                         button#dislike
                             a.linkshowdislikes(href='#', rel='#{data[i]._id') DisLike
                         span#showdislike
-                        span#comment 
-                            a Comment
+                        span#commentidea 
+                            a.feed-link(href='#') Comment
                         div#dateposted
                             span#by By
-                            a 
+                            a.feed-link(href='#')
                                 span#byname #{data[i].name}
                         span#commentdata #{data[i].time}
+                        form#postComment(action='/postComment', method='POST')
+                            textarea#newcomment(name='comment', placeholder='write a comment...')
+                            input.sub(type='submit', value='comment')
 
                     -}
             -else

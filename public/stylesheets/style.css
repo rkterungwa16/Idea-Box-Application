@@ -84,7 +84,7 @@ ul.topnav li {
   height: 5px;
 }
 
-#sign-up, #sign-in, #other-signin {
+#sign-up, #sign-in, #other-signin, #sign-in-a {
     text-align: center;
     padding-bottom: 10px;
 }
@@ -122,14 +122,6 @@ button{
 #respond {
   margin-top: 40px;
   color: white;
-}
-
-
-.required {
-  margin-left: 300px;
-}input[type="submit"] {
-
-  margin-left: 300px;
 }
 
 #ideahead {
@@ -185,50 +177,69 @@ button{
 
 
 #feed {
-  margin-left: 400px;
-  margin-top: 100px;
-}
+    width:100%;
+    max-width:500px;
+    margin:0 auto;
+    border: 1px solid #2C3C1B;
+    -webkit-box-shadow: 0 2px 10px #2B2B2B;
+    -moz-box-shadow: 0 2px 10px #2B2B2B;
+    box-shadow: 0 2px 10px #2B2B2B;
+    background: #8cc84b;
+    padding: 10px;
+    padding-left:0px;
+    padding-right:0px;
+    padding-bottom:20px;
+    border-bottom: 0;
+  }
 
 .test {
-  border-left-style: solid;
-  border-left-width: 5px; 
-  border-top-style: medium;
-  background-color: #dcdcdc;
-  width: 50%;
-}
-#dislike, #like {  
+  display:inline-block;
+  background: #46483e;
+  min-height:68px;
+  padding-left:20px;
+  padding-right:20px;
+  padding-top: 13px;
+  min-height: 64px;
+  border-bottom: 1px solid rgba(42, 48, 41, 0.8);
+  padding-left: 0px;
+  padding-right: 0px;
+  width: 100%
+  }
+
+button#dislike, #like {  
   color: white;
-  background-color: blue;
   border: none;
   padding: 10px 10px;
   text-align: center;
   cursor: pointer;
-  background-color: #008CBA;
+  width: 100px;
+  margin-top: 1px;
+}
+
+#dislike {
+  margin-left: 175px;
 }
 
 #like:hover {  
-  background-color: green;
+  background-color: blue;
 }
 
 #dislike:hover {
   background-color: red;
 }
 
-button#submit {  
+#submit {  
   color: white;
-  background-color: blue;
   border: none;
   padding: 10px 10px;
   text-align: center;
   cursor: pointer;
-  background-color: #008CBA;
 }
 
-
-
-#dislike {
-  margin-left: 50px;
+#submit:hover {
+  background-color: green;
 }
+
 
 #likecount {
   padding-left: 5px;
@@ -242,14 +253,14 @@ button#submit {
   margin-left: 8px;
 }
 
-#comment {
+#commentidea {
   margin-left: 15px;
 }
 
-a {
-  color: white;
+.feed-link, .linkshowlikes, .linkshowdislikes {
   text-decoration: none;
 }
+
 #ideaTitle {
   color: blue;
 }
@@ -257,13 +268,39 @@ a {
   color: black;
 }
 
-#mdComment{
-width: 50%;
-}
 #comment_title {
-
-color: blue;
+  color: blue;
 }
 .likesCount {
   color:blue;
+}
+
+#newcomment {
+  width: 86%;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  border: 1px solid rgb(155, 155, 155);
+  width: 75%;
+  float: left;
+  max-width: 75%;
+  min-width: 75%;
+  height: 36px;
+  max-height: 36px;
+  min-height: 36px;
+}
+
+.sub {
+  border:0px;
+  background-image: linear-gradient(to bottom, #FDFDFD, #6F6F6F);
+  border-radius: 3px;
+  padding: 6px;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+.submit {
+  width: 500px;
+  width:50%;
+  margin: 10px auto;
+  text-align: center;
 }
