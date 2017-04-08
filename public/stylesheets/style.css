@@ -119,64 +119,65 @@ button{
   ********* PROFILE SECTION **********
 */
 
-#respond {
-  margin-top: 40px;
-  color: white;
-}
-
-#ideahead {
-  margin-left: 300px;
-}
-
-#respond input[type='text'],
-#respond input[type='email'], 
-#respond textarea {
-  margin-bottom: 10px;
-  margin-left: 300px;
-  display: block;
-  width: 25%;
-
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -o-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -khtml-border-radius: 5px;
-  border-radius: 5px;
-
-  line-height: 1.4em;
-}
-
-.backdrop {
-  width: 50%;
-  height: 50%;
-  background-color: #777777;
-}
-
-.popup {
-  height: -webkit-calc(100% - 100px);
-  width: 50%
-  top: -moz-calc(50% - 200px);
-  top: -webkit-calc(50% - 200px);
-  top: calc(50% - 200px);
-  background: #333;
-}
 
 #username {
   color: white;
 }
 
-#comment {
-  height: 50px;
-  color: blue;
+#comment, #comment_title {
+  margin-top: 8px;
+  margin-left: 4px;
 }
 
+.centerme {
+  text-align:center;
+}
+img {
+  vertical-align: middle;
+}
 
+#theusername{color:#D2D8BA;}
+
+#profPic {width: 120px; height: 120px; margin-bottom: 14px}
+
+#feedbtn{
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#feedlinkbtn{
+  width:200px;
+  margin-top: 10px;
+  border:2px solid #46b8da;
+  color:#045;
+  font-family: inherit;
+  font-weight: bold;
+  padding:5px;
+  text-decoration: none;
+  text-align: center;
+}
+
+#feedlinkbtn:hover{
+  cursor:pointer;
+  background:#09c;
+  color: #fff;  
+}
+
+#sub {
+  border:0px;
+  background-image: linear-gradient(to bottom, #FDFDFD, #6F6F6F);
+  border-radius: 3px;
+  padding: 6px;
+  vertical-align: middle;
+  margin-left: 10px;
+  margin-top: 8px;
+}
 
 /*****GLOBAL FEED *******/
 
 
-#feed {
+#feed, #postsOuter {
     width:100%;
     max-width:500px;
     margin:0 auto;
@@ -192,7 +193,7 @@ button{
     border-bottom: 0;
   }
 
-.test {
+.test, .post {
   display:inline-block;
   background: #46483e;
   min-height:68px;
@@ -275,7 +276,7 @@ button#dislike, #like {
   color:blue;
 }
 
-#newcomment {
+#newcomment, #comment {
   width: 86%;
   margin-bottom: 10px;
   border-radius: 4px;

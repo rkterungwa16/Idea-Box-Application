@@ -71,6 +71,18 @@ userIdeaRef.orderByValue().on("value", function(data) {
 });
 
 
+function uniqueLike (data, marr) {
+	var pos = marr.indexOf(data);
+	if (pos < 0) {
+		marr.push(data);
+	}
+	else {
+		marr.splice(pos, 1);
+	}
+	return;
+}
+
+
 // Router for welcome page and user home page
 app.get('/', function (req, res) {
 	if (req.session.user) {
@@ -226,7 +238,8 @@ app.get('/likes', function (req, res) {
         
         console.log(uid);
         var updates = {};
-        likesArr.push(email);
+        //likesArr.push(email);
+        uniqueLike(email, likesArr);
         updates['/idea/' + uid + '/' + '/likes/'] = likesArr;
 
   		firebase.database().ref().update(updates);     
