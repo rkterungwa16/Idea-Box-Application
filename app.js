@@ -75,11 +75,12 @@ function uniqueLike (data, marr) {
 	var pos = marr.indexOf(data);
 	if (pos < 0) {
 		marr.push(data);
+		return marr;
 	}
 	else {
 		marr.splice(pos, 1);
+		return marr;
 	}
-	return;
 }
 
 
@@ -239,8 +240,8 @@ app.get('/likes', function (req, res) {
         console.log(uid);
         var updates = {};
         //likesArr.push(email);
-        uniqueLike(email, likesArr);
-        updates['/idea/' + uid + '/' + '/likes/'] = likesArr;
+        var Arr = uniqueLike(email, likesArr);
+        updates['/idea/' + uid + '/' + '/likes/'] = Arr;
 
   		firebase.database().ref().update(updates);     
         //console.log(data);
