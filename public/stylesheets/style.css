@@ -177,7 +177,7 @@ img {
 /*****GLOBAL FEED *******/
 
 
-#feed, #postsOuter {
+.feed, #postsOuter {
     width:100%;
     max-width:500px;
     margin:0 auto;
@@ -193,7 +193,8 @@ img {
     border-bottom: 0;
   }
 
-.test, .post {
+.test, .post, .my-post {
+  color: white;
   display:inline-block;
   background: #46483e;
   min-height:68px;
@@ -213,7 +214,7 @@ button#dislike, #like {
   padding: 10px 10px;
   text-align: center;
   cursor: pointer;
-  width: 100px;
+  width: 70px;
   margin-top: 1px;
 }
 
@@ -258,25 +259,26 @@ button#dislike, #like {
   margin-left: 15px;
 }
 
-.feed-link, .linkshowlikes, .linkshowdislikes {
+.feed-link, .linkshowlikes, .linkshowdislikes, .feed-comment {
   text-decoration: none;
-}
-
-#ideaTitle {
-  color: blue;
-}
-#ideaBody {
   color: black;
 }
 
-#comment_title {
-  color: blue;
+#ideaTitle {
+  color: white;
 }
-.likesCount {
-  color:blue;
+#ideaBody {
+  color: white;
 }
 
-#newcomment, #comment {
+#comment_title {
+  color: black;
+}
+.likesCount {
+  color:black;
+}
+
+.ideacomment, #comment {
   width: 86%;
   margin-bottom: 10px;
   border-radius: 4px;

@@ -29,6 +29,7 @@ firebase.initializeApp(config);
 var db = firebase.database();
 var userRef = db.ref('user/');
 var userIdeaRef = db.ref('idea/');
+var commentIdeaRef = db.ref('comment/');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -170,24 +171,26 @@ app.post('/signup', function (req, res) {
 
 app.post('/postIdea', function (req, res) {
 	if (req.session.user) {
-		var comment_author = req.session.user.name.toLowerCase();
+		var idea_author = req.session.user.name.toLowerCase();
 		var comment = req.body.comment;
 		var title = req.body.comment_title
 		var email = req.session.user.email;
 		var time = new Date().toISOString();
 		var id = new Date().valueOf();
-		var newCommentAuthor = { email: email,
-		 name: comment_author,
+		var likeCount = 0;
+		var newIdeaAuthor = { email: email,
+		 name: idea_author,
 		 title: title,
 		 likes: [email], 
 		 time: time,
 		 body: comment,
+		 likeCount: likeCount,
 		 _id: id
 		};
 
-		userIdeaRef.push(newCommentAuthor);
-		console.log(comment_author + ' has posted a new status')
-		io.sockets.emit('newIdea', {newCommentAuthor: newCommentAuthor});
+		userIdeaRef.push(newIdeaAuthor);
+		console.log(idea_author + ' has posted a new status')
+		io.sockets.emit('newIdea', {newIdeaAuthor: newIdeaAuthor});
 		res.redirect('/');
 	}
 
@@ -195,6 +198,25 @@ app.post('/postIdea', function (req, res) {
 		res.redirect('/');
 	}
 })
+
+app.post('/addComment', function (req, res) {
+	if (req.session.user) {
+		var email = req.session.user.email;
+		var comment_author = req.session.user.name.toLowerCase();
+		var comment = req.body.commentBody;
+		var id = req.body.id;
+		var ideaComment = {
+			name: comment_author,
+			email: email,
+			comment: comment,
+			id: id
+		};
+
+		commentIdeaRef.push(ideaComment);
+	}
+})
+
+
 
 app.get('/feed', function (req, res) {
    	res.redirect('/');
@@ -215,7 +237,7 @@ app.get('/user/logout', function (req, res) {
 app.get('/ideaData', function (req, res) {
 	if (req.session.user) {
 		currentUser = req.session.user;
-		console.log(arr);
+		console.log('The likes length', arr[0].likes.length);
 		res.json(arr);
 	}
 });
@@ -227,6 +249,7 @@ app.get('/likes', function (req, res) {
 		var uid;
 		var data;
 		var likesArr;
+		var likeCount;
 		console.log('The id for like', id);
 		console.log(typeof id);
 		// locate idea with id.
@@ -240,8 +263,20 @@ app.get('/likes', function (req, res) {
         console.log(uid);
         var updates = {};
         //likesArr.push(email);
-        var Arr = uniqueLike(email, likesArr);
-        updates['/idea/' + uid + '/' + '/likes/'] = Arr;
+        if (!likesArr) {
+        	var newLikes = [email];
+        	likeCount = newLikes.length;
+        	updates['/idea/' + uid + '/' + '/likes/'] = newLikes;
+        	updates['/idea/' + uid + '/' + '/likeCount/'] = likeCount;
+        }
+        else {
+        	likeCount = likesArr.length;
+        	var Arr = uniqueLike(email, likesArr);
+        	updates['/idea/' + uid + '/' + '/likes/'] = Arr;
+        	updates['/idea/' + uid + '/' + '/likeCount/'] = likeCount;
+        }
+        
+        
 
   		firebase.database().ref().update(updates);     
         //console.log(data);

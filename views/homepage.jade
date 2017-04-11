@@ -5,29 +5,30 @@ block content
         div.submit
             button#submit
                 a.feed-link(href='submitIdea') Submit An Idea
-        div#feed
+        div.feed
             -if (data[0]) 
                 div#socket
                     -for (var i=0; i<data.length; ++i) {
-                        div.test
+                        div.test(id='#{data[i]._id')
                             h3#ideaTitle #{data[i].title}
                             p#ideaBody #{data[i].body}
                         button#like
                             a.linkshowlikes(href='#', rel='#{data[i]._id}') Like
-                        span.likesCount(id='#{data[i]._id}')
+                        span.likesCount(id='#{data[i]._id}') #{data[i].likeCount}
                         button#dislike
-                            a.linkshowdislikes(href='#', rel='#{data[i]._id') DisLike
+                            a.linkshowdislikes(href='#', rel='#{data[i]._id}') DisLike
                         span#showdislike
                         span#commentidea 
-                            a.feed-link(href='#') Comment
+                            a.feed-comment(href='#') Show Comments
                         div#dateposted
-                            span#by By
+                            span#by By 
                             a.feed-link(href='#')
                                 span#byname #{data[i].name}
                         span#commentdata #{data[i].time}
                         form#postComment(action='/postComment', method='POST')
-                            textarea#newcomment(name='comment', placeholder='write a comment...')
-                            input.sub(type='submit', value='comment')
+                            textarea.ideacomment(id='#{data[i]._id}', name='ideacomment', placeholder='write a comment...')
+                            input.sub(id='#{data[i]._id}', type='submit', value='comment')
+                        .commentarea(id='#{data[i]._id}')
 
                     -}
             -else

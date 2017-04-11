@@ -28,7 +28,7 @@ function showInfo (event) {
 	$('#' + $(this).attr('rel')).text(ideasData[0].likes.length);
 }
 
-// Delete User
+// Update likes
 function likeIdea(event) {
     event.preventDefault();
     var id = $(this).attr('rel');
@@ -52,13 +52,64 @@ function likeIdea(event) {
 
 };
 
+function addComment (event) {
+	event.preventDefault();
+	var id = $(this).attr('id');
+	var commentBody = $('.ideacomment').val();
+	console.log('This is the comment', commentBody);
+	var commentData = {id: id, commentBody: commentBody};
+	console.log('this is the comment id', id);
+	$.ajax({
+		type: 'POST',
+		url: '/addComment',
+		data: commentData,
+		dataType: 'JSON'
+	}).done(function (response) {
+		console.log('Everything ok');
+		appendComment();
+	})
+
+}
+
+function appendComment (event) {
+	var id = $(this).attr('rel');
+	$.getJSON('/getComment', function (data) {
+		var addIdea = '<div class="post">' +
+    		'<a class="colorize" href="/user/"' + data.name + '>' +
+    		'<div class="smallpic">' +
+    		'<img class="smallpic_img" src=" data.image">'+
+    		'</div>' +
+    		'<div class="smallname">' + data.name + '</div>'+
+    		'</a>' +
+    		'<br>' +
+    		'<div class="statusbody">' + data.comment + '</div>'
+    		'</div>';
+    		$('div#' + id).prepend(addIdea); 
+	});
+
+}
 
 $(function () {
-	//getData();
 
     // Like link click
     getData();
     $('.linkshowlikes').on('click', likeIdea);
+    $('.sub').on('click', addComment);
+
+    $('.my-post').hide();
+    var $postarea = $('.post');
+	$postarea.hide();
+	$('a.feed-comment').click(function (event) {
+		event.preventDefault();
+		if ($postarea.is(':hidden')) {
+			$postarea.slideDown('slow');
+			$(this).text('Hide Comments');
+		}
+		else {
+			$postarea.slideUp('slow');
+			$(this).text('Show Comments');
+		}
+	})
    
 	var hostname = window.location.hostname;
 	//var socket = io.connect(hostname);
