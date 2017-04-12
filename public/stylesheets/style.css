@@ -194,9 +194,7 @@ img {
   }
 
 .test, .post, .my-post {
-  color: white;
   display:inline-block;
-  background: #46483e;
   min-height:68px;
   padding-left:20px;
   padding-right:20px;
@@ -206,7 +204,21 @@ img {
   padding-left: 0px;
   padding-right: 0px;
   width: 100%
-  }
+}
+
+.test {
+  background: #46483e;
+  color: white;
+}
+.post {
+  background: white;
+  color: black;
+}
+
+.my-post {
+  background: #46483e;
+  color: white;
+}
 
 button#dislike, #like {  
   color: white;
@@ -235,7 +247,7 @@ button#dislike, #like {
   border: none;
   padding: 10px 10px;
   text-align: center;
-  cursor: pointer;
+  cursor: pointer; 
 }
 
 #submit:hover {

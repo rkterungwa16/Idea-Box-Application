@@ -9,26 +9,35 @@ block content
             -if (data[0]) 
                 div#socket
                     -for (var i=0; i<data.length; ++i) {
-                        div.test(id='#{data[i]._id')
-                            h3#ideaTitle #{data[i].title}
-                            p#ideaBody #{data[i].body}
-                        button#like
-                            a.linkshowlikes(href='#', rel='#{data[i]._id}') Like
-                        span.likesCount(id='#{data[i]._id}')   #{data[i].likeCount}
-                        button#dislike
-                            a.linkshowdislikes(href='#', rel='#{data[i]._id}') DisLike
-                        span#showdislike
-                        span#commentidea 
-                            a.feed-comment(href='#') Show Comments
-                        div#dateposted
-                            span#by By 
-                            a.feed-link(href='#')
-                                span#byname #{data[i].name}
-                        span#commentdata #{data[i].time}
-                        form#postComment(action='/postComment', method='POST')
-                            textarea.ideacomment(id='#{data[i]._id}', name='ideacomment', placeholder='write a comment...')
-                            input.sub(id='#{data[i]._id}', type='submit', value='comment')
-                        .commentarea(id='#{data[i]._id}')
+                        div.test
+                                h3#ideaTitle #{data[i].title}
+                                p#ideaBody #{data[i].body}
+                            button#like
+                                a.linkshowlikes(href='#', rel='#{data[i]._id}') Like
+                            span.likesCount(id='#{data[i]._id}')   #{data[i].likeCount}
+                            button#dislike
+                                a.linkshowdislikes(href='#', rel='#{data[i]._id}') DisLike
+                            span#showdislike
+                            span#commentidea 
+                                a.feed-comment(href='#', id='feedCmnt#{data[i]._id}') Show Comments
+                            div#dateposted
+                                span#by By 
+                                a.feed-link(href='#')
+                                    span#byname #{data[i].name}
+                            span#commentdata #{data[i].time}
+                            form.postComment(action='/postComment', method='POST', id='postcmnt#{data[i]._id}')
+                                textarea.ideacomment(id='ideacmnt#{data[i]._id}', name='ideacomment', placeholder='write a comment...')
+                                input.sub(id='sub#{data[i]._id}', type='submit', value='comment')
+                            .commentarea(id='cmtarea#{data[i]._id}')
+                                -if (data[i].comments)
+                                    -for (var j=0; j<data[i].comments.length; ++j) {
+                                        div.post
+                                            a.colorize(href='/user/#{data[i].comments[j].name}')
+                                                div.smallpic
+                                                div.smallname #{data[i].comments[j].name}
+                                            br
+                                            div.statusbody #{data[i].comments[j].comment}
+                                    -}
 
                     -}
             -else

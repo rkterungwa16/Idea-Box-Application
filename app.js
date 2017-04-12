@@ -72,7 +72,8 @@ userIdeaRef.orderByValue().on("value", function(data) {
 });
 
 
-function uniqueLike (data, marr) {
+// User can like no more than once
+function oneLikePerUser (data, marr) {
 	var pos = marr.indexOf(data);
 	if (pos < 0) {
 		marr.push(data);
@@ -199,30 +200,67 @@ app.post('/postIdea', function (req, res) {
 	}
 })
 
+/*
+ * User comment for each idea post
+*/
 app.post('/addComment', function (req, res) {
 	if (req.session.user) {
+		var uid;
+		var data;
 		var email = req.session.user.email;
 		var comment_author = req.session.user.name.toLowerCase();
 		var comment = req.body.commentBody;
-		var id = req.body.id;
+		var id = parseInt(req.body.id);
+		var time = new Date().toISOString();
 		var ideaComment = {
 			name: comment_author,
-			email: email,
 			comment: comment,
-			id: id
+			time: time
 		};
+        console.log('comment author', ideaComment);
+        console.log('Type of id', typeof id);
+		userIdeaRef.orderByChild("_id").equalTo(id).on("child_added", function (snapshot) {
+  			console.log('The comment key', snapshot.key);
+  			console.log('The current post', snapshot.val());
+  			uid = snapshot.key;
+  			data = snapshot.val();
+  			commentsArr = snapshot.val().comments;			
+		});
+		console.log('The idea post data', data);
+		console.log('The comment arr', commentsArr);
+		var updates = {};
+        // Condition for first comment and condition subsequent comments
+        if (!commentsArr) {
+        	var newComments = [ideaComment];
+        	commentCount = newComments.length;
+        	updates['/idea/' + uid + '/' + '/comments/'] = newComments;
+        	updates['/idea/' + uid + '/' + '/commentCount/'] = commentCount;
+        }
+        else {
+            commentsArr.push(ideaComment);
+        	commentCount = commentsArr.length;
+        	updates['/idea/' + uid + '/' + '/comments/'] = commentsArr;
+        	updates['/idea/' + uid + '/' + '/commentCount/'] = commentCount;
+        }
+               
+        // Update likes and likeCount property in database
+  		firebase.database().ref().update(updates); 
 
-		commentIdeaRef.push(ideaComment);
+		res.json(data);
 	}
 })
 
 
-
+/*
+ *  Go to feed page 
+*/
 app.get('/feed', function (req, res) {
    	res.redirect('/');
 })
 
-
+/*
+ *  Log current user out from feed
+*/
 app.get('/logout', function (req, res) {
 	req.session.destroy (function () {
 		console.log ('user logged out.');
@@ -230,10 +268,16 @@ app.get('/logout', function (req, res) {
 	res.render('welcome');
 });
 
+/*
+ * Log current user out from profile page
+*/
 app.get('/user/logout', function (req, res) {	
 	res.redirect('/logout');
 });
 
+/*
+ * 
+*/
 app.get('/ideaData', function (req, res) {
 	if (req.session.user) {
 		currentUser = req.session.user;
@@ -263,6 +307,7 @@ app.get('/likes', function (req, res) {
         console.log(uid);
         var updates = {};
         //likesArr.push(email);
+        // Condition for first like and condition subsequent likes
         if (!likesArr) {
         	var newLikes = [email];
         	likeCount = newLikes.length;
@@ -271,13 +316,13 @@ app.get('/likes', function (req, res) {
         }
         else {
         	likeCount = likesArr.length;
-        	var Arr = uniqueLike(email, likesArr);
+        	var Arr = oneLikePerUser(email, likesArr);
         	updates['/idea/' + uid + '/' + '/likes/'] = Arr;
         	updates['/idea/' + uid + '/' + '/likeCount/'] = likeCount;
         }
         
         
-
+        // Update likes and likeCount property in database
   		firebase.database().ref().update(updates);     
         //console.log(data);
   		res.json(data);
