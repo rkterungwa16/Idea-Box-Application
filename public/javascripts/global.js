@@ -1,5 +1,4 @@
 var ideasData = [];
-var postId;
 
 function map (arr) {
 	var mapped = [];
@@ -18,27 +17,8 @@ function getIdNumber (str, num) {
 	return strArr.join('');
 }
 
-function getData () {
-	$.getJSON('/ideaData', function (data) {
-        ideasData = data;
-	});
-}
-
-//console.log(ideasData);
-
-function likeCount (data) {
-	//$('#showlike').text(1);
-	$('#' + $(this).attr('rel')).text(data.likes.length);
-}
-
-function showInfo (event) {
-	event.preventDefault();
-	console.log($(this).attr('rel'));
-	$('#' + $(this).attr('rel')).text(ideasData[0].likes.length);
-}
-
 /*
- *  Update likes
+ *  Like an idea post
 */ 
 function likeIdea(event) {
     event.preventDefault();
@@ -52,17 +32,18 @@ function likeIdea(event) {
         data: idData,
         dataType: 'JSON'
     }).done(function (response) {
-        // Get current data
-        //getData();
         console.log(response);
         console.log(response.likes.length);
         var count = response.likes.length;
         console.log(typeof count);
-        $('#' + id).text(count);
+        $('#likecnt' + id).text(count);
     });
 
 };
 
+/*
+ *  Comment on an idea post
+*/ 
 function addComment (event) {
 	event.preventDefault();
 	var id = $(this).attr('id');
@@ -89,11 +70,14 @@ function addComment (event) {
 
 }
 
+/*
+ *  Add comments on an idea post
+*/ 
 function appendComment (data, id) {
-	var addIdea = '<div class="post">' +
-		'<a class="colorize" href="/user/"' + data.comments[0].name + '>' +
+	var addIdea = '<div class="post' + id + '">' +
+		'<a class="colorize" href="/user/' + data.comments[0].name + '">' +
 		'<div class="smallpic">' +
-		'<img class="smallpic_img" src=" data.image">'+
+		'<img class="smallpic_img" src=" data.image">' +
 		'</div>' +
 		'<div class="smallname">' + data.comments[0].name + '</div>'+
 		'</a>' +
@@ -104,23 +88,16 @@ function appendComment (data, id) {
 }
 
 $(function () {
-
 	var postId;
-
-	// Get unique idea post id
-	//postId = $('.test').attr('id');
-	console.log('Test div id', postId);
-   
+	console.log('Test div id', postId);  
     // Like link click
-    getData();
     $('.linkshowlikes').on('click', likeIdea);
     $('.sub').on('click', addComment);
-
     // Hide user profile post
 	$('.my-post').hide();
 	// Hide idea comment post
 	$('.commentarea').hide();
- 
+	// Slide comments up and down
 	$('.feed-comment').click(function (event) {
 		event.preventDefault();
 		var alphnumId = $(this).attr('id');
@@ -138,7 +115,6 @@ $(function () {
 	})
    
 	var hostname = window.location.hostname;
-	//var socket = io.connect(hostname);
 	var socket = io.connect(hostname);
 
 	socket.on('newIdea', function (res) { 

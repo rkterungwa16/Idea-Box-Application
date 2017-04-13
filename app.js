@@ -54,16 +54,6 @@ var Users = [];
 
 var arr = [];
 
-// userIdeaRef.orderByKey().on("child_added", function(snapshot) {
-//     var ideasArr = [];
-//    console.log(snapshot.val());
-// });
-
-// userIdeaRef.orderByChild("_id").equalTo(1491082395391).on("child_added", function(snapshot) {
-//   console.log(snapshot.key);
-//   console.log(snapshot.val());
-// });
-
 // Read all data in ideas collection
 userIdeaRef.orderByValue().on("value", function(data) {
    	data.forEach(function (data) {
@@ -72,7 +62,7 @@ userIdeaRef.orderByValue().on("value", function(data) {
 });
 
 
-// User can like no more than once
+// User can like only once
 function oneLikePerUser (data, marr) {
 	var pos = marr.indexOf(data);
 	if (pos < 0) {
@@ -85,7 +75,6 @@ function oneLikePerUser (data, marr) {
 	}
 }
 
-
 // Router for welcome page and user home page
 app.get('/', function (req, res) {
 	if (req.session.user) {
@@ -94,29 +83,35 @@ app.get('/', function (req, res) {
 	} else {
 		res.render('welcome');
 	}
-
 });
 
-
+/*
+ *  Login link to login page
+*/ 
 app.get('/login', function (req, res) {
 	res.render('login');
 });
 
+/*
+ *  Submit an idea link to general feed page
+*/ 
 app.get('/submitIdea', function (req, res) {
 	res.render('newIdeaPost1');
 })
 
-
+/*
+ *  App Sign in using firebase authentication
+*/ 
 app.post('/login', function (req, res) {
 	var email = req.body.email;
 	var password = req.body.password;
 	var name;
-
+    // Get user data equivalent to this email
 	userRef.orderByChild("email").equalTo(email).on("child_added", function(data) {
        console.log("Equal to filter: " + data.val().name);
        name = data.val().name;
     });
-
+    // Firebase sign in
 	firebase.auth().signInWithEmailAndPassword(email, password)
 	.then(function (user) {
 		var user = {email: email, password: password, name: name};
@@ -132,8 +127,9 @@ app.post('/login', function (req, res) {
 	});
 });
 
-
-
+/*
+ *  User profile page
+*/ 
 app.get('/user/:name', function (req, res) {
 	if (req.session.user) {
 		name = req.params.name.toLowerCase();
@@ -143,14 +139,15 @@ app.get('/user/:name', function (req, res) {
 	}
 })
 
-
-
+/*
+ *  App signup using firebase email and password authentication
+*/ 
 app.post('/signup', function (req, res) {
 
 	var email = req.body.email;
 	var password = req.body.password;
 	var name = req.body.name;
-
+	// create email and password with firebase authentication
 	firebase.auth().createUserWithEmailAndPassword(email, password)
 	.then (function (user) {
 		var newUser = {email: email, password: password, name: name};
@@ -159,17 +156,16 @@ app.post('/signup', function (req, res) {
 	    res.redirect('/user/'+ name);
 	})
 	.catch(function (error) {
-
 		var errorCode = error.code;
 		var errorMessage = error.message;
 		res.render('welcome', {message: errorMessage});
-		console.log(error);
-		
+		console.log(error);		
     });
-
 });
 
-
+/*
+ *  Update likes
+*/ 
 app.post('/postIdea', function (req, res) {
 	if (req.session.user) {
 		var idea_author = req.session.user.name.toLowerCase();
@@ -188,13 +184,15 @@ app.post('/postIdea', function (req, res) {
 		 likeCount: likeCount,
 		 _id: id
 		};
-
+		// Post idea data to idea collections in database
 		userIdeaRef.push(newIdeaAuthor);
 		console.log(idea_author + ' has posted a new status')
 		io.sockets.emit('newIdea', {newIdeaAuthor: newIdeaAuthor});
+		// Later add new feature: append ideas to userprofile
+		// Jade construct to render all ideas posted by this user
+		// Get all ideas posted by this user
 		res.redirect('/');
 	}
-
 	else {
 		res.redirect('/');
 	}
@@ -241,15 +239,12 @@ app.post('/addComment', function (req, res) {
         	commentCount = commentsArr.length;
         	updates['/idea/' + uid + '/' + '/comments/'] = commentsArr;
         	updates['/idea/' + uid + '/' + '/commentCount/'] = commentCount;
-        }
-               
+        }               
         // Update likes and likeCount property in database
   		firebase.database().ref().update(updates); 
-
 		res.json(data);
 	}
 })
-
 
 /*
  *  Go to feed page 
@@ -276,16 +271,8 @@ app.get('/user/logout', function (req, res) {
 });
 
 /*
- * 
-*/
-app.get('/ideaData', function (req, res) {
-	if (req.session.user) {
-		currentUser = req.session.user;
-		console.log('The likes length', arr[0].likes.length);
-		res.json(arr);
-	}
-});
-
+ *  Like each idea posted
+*/ 
 app.get('/likes', function (req, res) {
 	if (req.session.user) {
 		var id = parseInt(req.query.id);
@@ -302,11 +289,9 @@ app.get('/likes', function (req, res) {
   			uid = snapshot.key;
   			data = snapshot.val();
   			likesArr = snapshot.val().likes; 			
-		});
-        
+		});       
         console.log(uid);
         var updates = {};
-        //likesArr.push(email);
         // Condition for first like and condition subsequent likes
         if (!likesArr) {
         	var newLikes = [email];
@@ -319,9 +304,7 @@ app.get('/likes', function (req, res) {
         	var Arr = oneLikePerUser(email, likesArr);
         	updates['/idea/' + uid + '/' + '/likes/'] = Arr;
         	updates['/idea/' + uid + '/' + '/likeCount/'] = likeCount;
-        }
-        
-        
+        }               
         // Update likes and likeCount property in database
   		firebase.database().ref().update(updates);     
         //console.log(data);
