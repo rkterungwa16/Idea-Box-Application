@@ -5,8 +5,9 @@ block content
       #nav-bar
         ul.topnav                    
           li.right
-            span#username #{currentUser.name}
-            a(href='/logout') Logout   
+            a(href='/logout') Logout  
+          li.left
+            a(id='username', href='/user/#{currentUser.name}') #{currentUser.name} 
 
     aside.centerme
       h1#theusername #{currentUser.name}

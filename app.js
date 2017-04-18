@@ -75,7 +75,9 @@ function oneLikePerUser (data, marr) {
 	}
 }
 
-// Router for welcome page and user home page
+/*
+*  Handler for welcome page and user home page
+*/ 
 app.get('/', function (req, res) {
 	if (req.session.user) {
 		var reverseArray = arr.reverse();
@@ -117,7 +119,8 @@ app.post('/login', function (req, res) {
 		var user = {email: email, password: password, name: name};
 		req.session.user = user;
 		console.log( req.body.email + ' ' + req.body.password);
-	    res.redirect('/user/'+name);
+	    //res.redirect('/user/'+name);
+	    res.redirect('/');
 	})
 	.catch(function (error) {
 		var errorCode = error.code;
@@ -153,7 +156,8 @@ app.post('/signup', function (req, res) {
 		var newUser = {email: email, password: password, name: name};
 	    userRef.push(newUser);
 	    req.session.user = newUser;
-	    res.redirect('/user/'+ name);
+	    //res.redirect('/user/'+ name);
+	    res.redirect('/');
 	})
 	.catch(function (error) {
 		var errorCode = error.code;
@@ -254,7 +258,7 @@ app.get('/feed', function (req, res) {
 })
 
 /*
- *  Log current user out from feed
+ *  Log out current user from feed
 */
 app.get('/logout', function (req, res) {
 	req.session.destroy (function () {

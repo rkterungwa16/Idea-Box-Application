@@ -1,6 +1,13 @@
 extends layout
 
 block content
+        div
+            #nav-bar
+                ul.topnav                    
+                    li.right
+                        a(href='/logout') Logout  
+                    li.left
+                        a(id='username', href='/user/#{user.name}') #{user.name}
         
         div.submit
             button#submit
