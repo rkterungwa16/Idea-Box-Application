@@ -61,12 +61,6 @@ userIdeaRef.orderByValue().on("value", function(data) {
    	});  	
 });
 
-// userIdeaRef.orderByChild("email").equalTo('terungwakombol@gmail.com').on("child_added", function (snapshot) {
-//   			console.log('The comment key', snapshot.key);
-//   			console.log('The current post', snapshot.val());			
-// 		});
-
-
 // User can like only once
 function oneLikePerUser (data, marr) {
 	var pos = marr.indexOf(data);
@@ -152,7 +146,6 @@ app.get('/user/:name', function (req, res) {
 		userIdeaRef.orderByChild("email").equalTo(email).on("child_added", function (snapshot) {
   			data.push(snapshot.val());
 		});
-		console.log('my idea post', data);
         res.render('newIdeaPost1', {currentUser: currentUser, data: data});
 	}
 })
@@ -247,8 +240,7 @@ app.post('/addComment', function (req, res) {
   			data = snapshot.val();
   			commentsArr = snapshot.val().comments;			
 		});
-		console.log('The idea post data', data);
-		console.log('The comment arr', commentsArr);
+		
 		var updates = {};
         // Condition for first comment and condition subsequent comments
         if (!commentsArr) {
