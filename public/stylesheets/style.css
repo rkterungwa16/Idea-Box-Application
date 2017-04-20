@@ -195,7 +195,7 @@ img {
     padding-left:0px;
     padding-right:0px;
     padding-bottom:20px;
-    border-bottom: 0;
+    border-bottom: 1px solid #333;
   }
 
 .test, .post, .my-post {
@@ -205,18 +205,18 @@ img {
   padding-right:20px;
   padding-top: 13px;
   min-height: 64px;
-  border-bottom: 1px solid rgba(42, 48, 41, 0.8);
+  border-bottom: 1px solid #333;
   padding-left: 0px;
   padding-right: 0px;
   width: 100%
 }
 
 .test {
-  background: #46483e;
-  color: white;
+  background: #C8C8C8;
+  color: black;
 }
 .post {
-  background: white;
+  background: #D8D8D8;
   color: black;
 }
 
@@ -282,10 +282,10 @@ button#dislike, #like {
 }
 
 #ideaTitle {
-  color: white;
+  color: black;
 }
 #ideaBody {
-  color: white;
+  color: black;
 }
 
 #comment_title {
