@@ -22,7 +22,21 @@ block content
           br
           textarea#comment(name='comment', rows='10', tabindex='4', required='required', placeholder='Post your idea...')
           input#sub(name='submit', type='submit', value='Submit Idea')
-        #add
+        br
+        span#myidea 
+          a.profile-post(href='#', id='myideapost') Show Ideas
         .my-post
-          .statusbody The moment of truth
+          -if (data[0])
+              -for (var i=0; i<data.length; ++i) {
+                  div.mypost(id='post#{data[i]._id}')
+                      a.colorize(href='/user/#{data[i].name}')
+                          div.smallpic
+                          div.smallname #{data[i].name}
+                      br
+                      div.statusbody 
+                        h3#ideaTitle #{data[i].title} 
+                        p#ideaBody #{data[i].body}
+              -}
+          -else
+            div#noposts No posts at this time
           

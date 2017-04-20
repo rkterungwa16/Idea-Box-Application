@@ -61,6 +61,11 @@ userIdeaRef.orderByValue().on("value", function(data) {
    	});  	
 });
 
+// userIdeaRef.orderByChild("email").equalTo('terungwakombol@gmail.com').on("child_added", function (snapshot) {
+//   			console.log('The comment key', snapshot.key);
+//   			console.log('The current post', snapshot.val());			
+// 		});
+
 
 // User can like only once
 function oneLikePerUser (data, marr) {
@@ -141,8 +146,14 @@ app.get('/user/:name', function (req, res) {
 	if (req.session.user) {
 		name = req.params.name.toLowerCase();
 		query = {name: name};
+		var email = req.session.user.email
+		var data = [];
 		currentUser = req.session.user;
-        res.render('newIdeaPost1', {currentUser: currentUser});
+		userIdeaRef.orderByChild("email").equalTo(email).on("child_added", function (snapshot) {
+  			data.push(snapshot.val());
+		});
+		console.log('my idea post', data);
+        res.render('newIdeaPost1', {currentUser: currentUser, data: data});
 	}
 })
 
@@ -183,6 +194,7 @@ app.post('/postIdea', function (req, res) {
 		var time = new Date().toISOString();
 		var id = new Date().valueOf();
 		var likeCount = 0;
+		var data;
 		var newIdeaAuthor = { email: email,
 		 name: idea_author,
 		 title: title,
@@ -199,6 +211,9 @@ app.post('/postIdea', function (req, res) {
 		// Later add new feature: append ideas to userprofile
 		// Jade construct to render all ideas posted by this user
 		// Get all ideas posted by this user
+		userIdeaRef.orderByChild("email").equalTo(email).on("child_added", function (snapshot) {
+  			data = snapshot.val();
+		});
 		res.redirect('/');
 	}
 	else {

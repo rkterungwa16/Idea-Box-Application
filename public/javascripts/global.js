@@ -94,7 +94,7 @@ $(function () {
     // Click to comment on an idea
     $('.sub').click(addComment);
     // Hide user profile post
-	$('.my-post').hide();
+	$('.mypost').hide();
 	// Hide idea comment post
 	$('.commentarea').hide();
 	// Slide comments up and down
@@ -111,6 +111,19 @@ $(function () {
 		else {
 			$postarea.slideUp('slow');
 			$(this).text('Show Comments');
+		}
+	});
+
+	$('.profile-post').click(function (event) {
+		event.preventDefault();
+		var $myprofileIdea = $('.mypost');
+		if ($myprofileIdea.is(':hidden')) {
+			$myprofileIdea.slideDown('slow');
+			$(this).text('Hide Ideas');
+		}
+		else {
+			$myprofileIdea.slideUp('slow');
+			$(this).text('show Ideas')
 		}
 	})
    

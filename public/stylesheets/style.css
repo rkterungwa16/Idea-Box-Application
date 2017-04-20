@@ -179,6 +179,11 @@ img {
   margin-top: 8px;
 }
 
+.profile-post {
+  text-decoration: none;
+  padding-bottom: 10px;
+}
+
 /*****GLOBAL FEED *******/
 
 
@@ -221,7 +226,7 @@ img {
 }
 
 .my-post {
-  background: #46483e;
+  background: #D8D8D8;
   color: white;
 }
 
