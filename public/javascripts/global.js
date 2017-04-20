@@ -90,9 +90,9 @@ function appendComment (data, id) {
 $(function () {
 	var postId; 
     // Click to like an idea
-    $('.linkshowlikes').on('click', likeIdea);
+    $('.linkshowlikes').click(likeIdea);
     // Click to comment on an idea
-    $('.sub').on('click', addComment);
+    $('.sub').click(addComment);
     // Hide user profile post
 	$('.my-post').hide();
 	// Hide idea comment post

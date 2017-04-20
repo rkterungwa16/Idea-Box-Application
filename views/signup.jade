@@ -8,11 +8,15 @@ block content
                         a(href='login') Login
         // #primary-menu .menu-container
         .container
-            #sign-in-a
-                h2 Login Details
-                form(action='/login', method='post')
+            #sign-up          
+                form(action='/signup' method='post')
+                    h2 Sign Up  To Post Your Ideas.
                     if(message)
                         h4 #{message}
+                    label(for='username') Name
+                    br
+                    input#storename(type='text', name='name')
+                    br
                     label(for='email') Email
                     br
                     input#email(type='email', name='email')
@@ -21,11 +25,10 @@ block content
                     br
                     input#password(type='password', name='password')
                     br
-                    button#btnlogin(type='submit') Login
-
-                h3 Are You A New Member? 
-                    a(href='/signup') Signup
+                    button#btnsignup(type='submit') Sign Up
             #other-signin
                 button#signin-facebook-btn(type='submit') sign-in with facebook
                 br
                 button#signin-google-btn(type='submit') sign-in with google 
+
+                    
